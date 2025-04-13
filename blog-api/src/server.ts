@@ -1,16 +1,13 @@
 import { MikroORM } from "@mikro-orm/sqlite"
 import { User } from "./modules/user/user.entity.js"
-
+import { Tag } from "./modules/user/tag.entity.js"
 
 const orm = await MikroORM.init()
 await orm.schema.refreshDatabase()
 
 const em = orm.em.fork()
 
-const user = new User();
-user.email = "foo@bar.com"
-user.fullName = "wonhee"
-user.password = "12345"
+const user = new User('Foor bar', 'foo@bar.com', '123456');
 
 await em.persist(user).flush()
 
@@ -42,7 +39,7 @@ console.log(userByEmail)
 // await em2.remove(userRef).flush();
 
 
-import { wrap } from '@mikro-orm/core';
+import { LoadStrategy, wrap } from '@mikro-orm/core';
 import { Article } from "./modules/user/article.entity.js"
 
 const userRef = em.getReference(User, 1);
@@ -73,5 +70,39 @@ console.log(article)
 console.log('it really is a User', article.author instanceof User); // true
 console.log('but not initialized', wrap(article.author).isInitialized()); // false
 
+
+const articleWithAuthor = await em.findOne(Article, article.id, {populate: ['author', 'text']})
+console.log(articleWithAuthor)
+
+em.clear()
+
+const userx = await em.findOneOrFail(User, 1, { populate: ['articles']})
+console.log('userx: ', userx)
+if (!userx.articles.isInitialized()) {
+  await userx.articles.init();
+}
+await userx.articles.loadItems();
+console.log('userx: ', userx)
+
+for (const article of user.articles) {
+  console.log(article.title);
+  console.log(article.author.fullName); // the `article.author` is linked automatically thanks to the Identity Map
+}
+
+const [articlex] = userx.articles;
+const newTag = em.create(Tag, { name: 'new' });
+const oldTag = em.create(Tag, { name: 'old' });
+
+articlex.tags.add(newTag, oldTag);
+await em.flush();
+console.log(articlex.tags);
+
+await em.populate(articlex, ['tags'])
+//article.tags.remove(oldTag)
+articlex.tags.remove(t => t.id == oldTag.id)
+
+await em.flush()
+
+console.log(articlex.tags)
 
 await orm.close()

@@ -43,12 +43,35 @@ console.log(userByEmail)
 
 
 import { wrap } from '@mikro-orm/core';
+import { Article } from "./modules/user/article.entity.js"
 
 const userRef = em.getReference(User, 1);
 console.log('userRef is initialized:', wrap(userRef).isInitialized());
 
 await wrap(userRef).init();
 console.log('userRef is initialized:', wrap(userRef).isInitialized());
+
+em2.clear()
+
+// const article = em2.create(Article, {
+//   slug: 'foo',
+//   title: 'FOO',
+//   text: 'Loren impsum dolor sit amet',
+//   description: 'Foo is bar',
+//   author: user.id
+// });
+
+const article = em2.create(Article, {
+  title: 'FOO is Bar',
+  text: 'Lorem impsum dolor sit amet',
+  author: user.id
+});
+
+await em2.flush()
+console.log(article)
+
+console.log('it really is a User', article.author instanceof User); // true
+console.log('but not initialized', wrap(article.author).isInitialized()); // false
 
 
 await orm.close()

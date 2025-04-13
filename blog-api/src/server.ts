@@ -26,3 +26,29 @@ console.log('users are the same?', user === userByEmail)
 const allUser = await em.find(User, {})
 console.log(allUser)
 
+
+userByEmail.bio = 'changed'
+
+await em2.refresh(userByEmail)
+console.log("change are lost", userByEmail)
+
+userByEmail.bio = 'some change, will be saved';
+await em2.flush();
+
+console.log(userByEmail)
+
+// await em2.remove(userByEmail).flush()
+// const userRef = em2.getReference(User, 1);
+// await em2.remove(userRef).flush();
+
+
+import { wrap } from '@mikro-orm/core';
+
+const userRef = em.getReference(User, 1);
+console.log('userRef is initialized:', wrap(userRef).isInitialized());
+
+await wrap(userRef).init();
+console.log('userRef is initialized:', wrap(userRef).isInitialized());
+
+
+await orm.close()

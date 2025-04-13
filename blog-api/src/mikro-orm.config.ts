@@ -1,9 +1,7 @@
-import { Options, SqliteDriver } from '@mikro-orm/sqlite';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 
-const config: Options = {
-  // for simplicity, we use the SQLite database, as it's available pretty much everywhere
-  driver: SqliteDriver,
+// no need to specify the `driver` now, it will be inferred automatically
+export default defineConfig({
   dbName: 'sqlite.db',
   // folder-based discovery setup, using common filename suffix
   entities: ['dist/**/*.entity.js'],
@@ -13,6 +11,4 @@ const config: Options = {
   metadataProvider: TsMorphMetadataProvider,
   // enable debug mode to log SQL queries and discovery information
   debug: true,
-};
-
-export default config;
+});

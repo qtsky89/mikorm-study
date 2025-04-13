@@ -1,3 +1,4 @@
+import { defineConfig } from '@mikro-orm/sqlite';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 
 // no need to specify the `driver` now, it will be inferred automatically

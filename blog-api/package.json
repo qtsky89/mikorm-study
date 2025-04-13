@@ -9,6 +9,7 @@
   "devDependencies": {
     "@mikro-orm/cli": "^6.4.13",
     "@types/node": "^22.14.1",
+    "prettier": "3.5.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
     "vitest": "^3.1.1"

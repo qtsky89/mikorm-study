@@ -1,5 +1,6 @@
 import { defineConfig } from '@mikro-orm/sqlite';
 import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
+import {SeedManager} from '@mikro-orm/seeder'
 
 // no need to specify the `driver` now, it will be inferred automatically
 export default defineConfig({
@@ -12,4 +13,6 @@ export default defineConfig({
   metadataProvider: TsMorphMetadataProvider,
   // enable debug mode to log SQL queries and discovery information
   debug: true,
+  dynamicImportProvider: (id) => import(id),
+  extensions: [SeedManager]
 });

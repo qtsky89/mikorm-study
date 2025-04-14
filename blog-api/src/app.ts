@@ -1,6 +1,5 @@
-import { MikroORM, RequestContext } from "@mikro-orm/core";
+import { RequestContext } from "@mikro-orm/core";
 import { fastify } from 'fastify'
-import { Article } from "./modules/user/article.entity.js";
 import { initORM } from "./db.js";
 
 

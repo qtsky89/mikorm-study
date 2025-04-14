@@ -2,7 +2,7 @@ import { BeforeCreate, BeforeUpdate, Collection, Entity, EventArgs, OneToMany, P
 import { BaseEntity } from "../common/base.entity.js";
 // import { t } from '@mikro-orm/core'; // `t` or `types`
 import crypto from 'crypto';
-import { Article } from "./article.entity.js";
+import { Article } from "../article/article.entity.js";
 
 import {hash, verify} from 'argon2'
 

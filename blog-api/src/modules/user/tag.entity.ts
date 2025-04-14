@@ -1,6 +1,6 @@
 import { Collection, Entity, ManyToMany, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../common/base.entity.js";
-import { Article } from "./article.entity.js";
+import { Article } from "../article/article.entity.js";
 
 @Entity()
 export class Tag extends BaseEntity {

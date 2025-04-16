@@ -4,17 +4,33 @@ import { EntityData, RequiredEntityData } from '@mikro-orm/core';
 import { Social, User } from './user.entity.js';
 import { getUserFromToken } from '../common/utils.js';
 import { wrap } from '@mikro-orm/sqlite';
+import { z } from 'zod';
+
+const socialSchema = z.object({
+  twitter: z.string().optional(),
+  facebook: z.string().optional(),
+  linkedin: z.string().optional()
+});
+
+const userSchema = z.object({
+  email: z.string(),
+  fullName: z.string(),
+  password: z.string(),
+  bio: z.string().optional(),
+  social: socialSchema.optional(),
+})
+
+
 
 export async function registerUserRoutes(app: FastifyInstance) {
   const db = await initORM()
 
   app.post('/sign-up', async (request) => {
-    const body = request.body as EntityData<User>
-
-    if(!body.email || !body.fullName || !body.password) {
-      throw new Error("One or required field is missing. email, fullName, password")
-    }
-    if (await db.user.exists(body.email) ) {
+    
+    const dto = userSchema.parse(request.body)
+    
+    
+   if (await db.user.exists(dto.email) ) {
       throw new Error("This email is already registered, maybe you want to sign in?")
     }
 

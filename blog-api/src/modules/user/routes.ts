@@ -24,4 +24,11 @@ export async function registerUserRoutes(app: FastifyInstance) {
 
     return user
   })
+
+  app.post('/sign-in', async (request) => {
+    const { email, password} = request.body as {email: string, password: string} 
+    const user = await db.user.login(email, password)
+
+    return user
+  })
 }

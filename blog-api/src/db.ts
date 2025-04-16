@@ -3,13 +3,14 @@ import { Article } from "./modules/article/article.entity.js";
 import { User } from "./modules/user/user.entity.js";
 import { Tag } from "./modules/user/tag.entity.js";
 import { Comment } from "./modules/article/comment.entity.js";
+import { UserRepository } from "./modules/user/user.repository.js";
 
 export interface Services {
   orm: MikroORM;
   em: EntityManager;
   article: EntityRepository<Article>
   comment: EntityRepository<Comment>
-  user: EntityRepository<User>
+  user: UserRepository
   tag: EntityRepository<Tag>
 }
 

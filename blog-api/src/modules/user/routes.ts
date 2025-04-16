@@ -12,7 +12,7 @@ export async function registerUserRoutes(app: FastifyInstance) {
     if(!body.email || !body.fullName || !body.password) {
       throw new Error("One or required field is missing. email, fullName, password")
     }
-    if (await db.user.count({email: body.email}) > 0 ) {
+    if (await db.user.exists(body.email) ) {
       throw new Error("This email is already registered, maybe you want to sign in?")
     }
 

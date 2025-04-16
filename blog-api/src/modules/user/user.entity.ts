@@ -1,13 +1,16 @@
-import { BeforeCreate, BeforeUpdate, Collection, Entity, EventArgs, OneToMany, Property } from "@mikro-orm/core";
+import { BeforeCreate, BeforeUpdate, Collection, Entity, EntityRepositoryType, EventArgs, OneToMany, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../common/base.entity.js";
 // import { t } from '@mikro-orm/core'; // `t` or `types`
-import crypto from 'crypto';
+// import crypto from 'crypto';
 import { Article } from "../article/article.entity.js";
 
 import {hash, verify} from 'argon2'
+import { UserRepository } from "./user.repository.js";
 
-@Entity()
+@Entity({ repository: () => UserRepository})
 export class User extends BaseEntity<'bio'>{
+  [EntityRepositoryType]?: UserRepository;
+  
   @Property()
   fullName!: string;
 

@@ -1,4 +1,4 @@
-import { BeforeCreate, BeforeUpdate, Collection, Entity, EntityRepositoryType, EventArgs, OneToMany, Property } from "@mikro-orm/core";
+import { BeforeCreate, BeforeUpdate, Collection, Embeddable, Embedded, Entity, EntityRepositoryType, EventArgs, OneToMany, Property } from "@mikro-orm/core";
 import { BaseEntity } from "../common/base.entity.js";
 // import { t } from '@mikro-orm/core'; // `t` or `types`
 // import crypto from 'crypto';
@@ -28,6 +28,9 @@ export class User extends BaseEntity<'bio'>{
 
   @OneToMany({ mappedBy: 'author'})
   articles = new Collection<Article>(this)
+
+  @Embedded(() => Social, { object: true })
+  social?: Social;
 
   constructor(fullName: string, email: string, password: string) {
     super();
@@ -61,4 +64,16 @@ export class User extends BaseEntity<'bio'>{
 
   // @Property({ onUpdate: () => new Date() })
   // updatedAt = new Date();
+}
+
+@Embeddable()
+export class Social {
+  @Property()
+  twitter?: string;
+
+  @Property()
+  facebook?: string;
+
+  @Property()
+  linkedin?: string;
 }

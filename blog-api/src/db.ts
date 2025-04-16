@@ -2,6 +2,7 @@ import { EntityManager, EntityRepository, MikroORM, Options } from "@mikro-orm/s
 import { Article } from "./modules/article/article.entity.js";
 import { User } from "./modules/user/user.entity.js";
 import { Tag } from "./modules/user/tag.entity.js";
+import { Comment } from "./modules/article/comment.entity.js";
 
 export interface Services {
   orm: MikroORM;

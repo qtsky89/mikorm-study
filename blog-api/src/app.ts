@@ -1,6 +1,8 @@
 import { RequestContext } from "@mikro-orm/core";
 import { fastify } from 'fastify'
 import { initORM } from "./db.js";
+import { registerArticleRoutes } from "./modules/article/routes.js";
+import { registerUserRoutes } from "./modules/user/routes.js";
 
 
 export async function bootstrap(port = 3001) {
@@ -16,13 +18,8 @@ export async function bootstrap(port = 3001) {
   })
 
   // routes
-  app.get('/article', async (request) => {
-    const { limit, offset } = request.query as { limit ?: number; offset ?: number}
-    const [items, total] = await db.article.findAndCount({}, {limit, offset});
-
-    return {items, total}
-  })
-
+  app.register(registerArticleRoutes, { prefix: 'article' });
+  app.register(registerUserRoutes, { prefix: 'user' });
 
 
   const url = await app.listen({port});

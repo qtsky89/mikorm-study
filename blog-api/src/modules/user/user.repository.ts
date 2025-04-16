@@ -1,5 +1,6 @@
 import { EntityRepository } from "@mikro-orm/sqlite";
 import {User} from './user.entity.js'
+import { AuthError } from "../common/utils.js";
 
 export class UserRepository extends EntityRepository<User> {
   async exists(email: string) {
@@ -8,7 +9,7 @@ export class UserRepository extends EntityRepository<User> {
   }
 
   async login(email: string, password: string) {
-    const err = new Error('Invalid combination of email and password')
+    const err = new AuthError('Invalid combination of email and password')
 
     const user = await this.findOneOrFail({email}, {
       populate: ['password'],

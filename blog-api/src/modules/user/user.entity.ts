@@ -23,6 +23,9 @@ export class User extends BaseEntity<'bio'>{
   @Property({type: 'text'})
   bio = '';
 
+  @Property({ persist: false})
+  token?: string;
+
   @OneToMany({ mappedBy: 'author'})
   articles = new Collection<Article>(this)
 

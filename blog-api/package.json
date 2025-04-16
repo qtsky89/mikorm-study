@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "@fastify/jwt": "^9.1.0",
     "@mikro-orm/core": "^6.4.13",
     "@mikro-orm/migrations": "^6.4.13",
     "@mikro-orm/reflection": "^6.4.13",

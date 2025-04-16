@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { initORM } from '../../db.js';
-import { EntityData } from '@mikro-orm/core';
-import { User } from './user.entity.js';
+import { EntityData, RequiredEntityData } from '@mikro-orm/core';
+import { Social, User } from './user.entity.js';
 import { getUserFromToken } from '../common/utils.js';
 import { wrap } from '@mikro-orm/sqlite';
 
@@ -18,8 +18,11 @@ export async function registerUserRoutes(app: FastifyInstance) {
       throw new Error("This email is already registered, maybe you want to sign in?")
     }
 
-    const user = new User(body.fullName, body.email, body.password)
-    user.bio = body.bio ?? '';
+    // const user = new User(body.fullName, body.email, body.password)
+    // user.bio = body.bio ?? '';
+    // user.social = body.social as Social
+
+    const user = db.user.create(request.body as RequiredEntityData<User>)
     await db.em.persist(user).flush()
     user.token = app.jwt.sign({id: user.id})
 

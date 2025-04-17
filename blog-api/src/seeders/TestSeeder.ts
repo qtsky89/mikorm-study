@@ -1,14 +1,15 @@
-import type { EntityManager } from '@mikro-orm/core';
+import type { EntityManager } from '@mikro-orm/sqlite';
 import { Seeder } from '@mikro-orm/seeder';
 import { User } from '../modules/user/user.entity.js';
 
 export class TestSeeder extends Seeder {
 
   async run(em: EntityManager): Promise<void> {
-    em.create(User, {
+    const author = em.create(User, {
       fullName: 'Foo Bar',
       email: 'foo@bar.com',
       password: 'password123',
+      social: { twitter: '@foobar' },
       articles: [
         {
           title: 'title 1/3',
@@ -29,6 +30,28 @@ export class TestSeeder extends Seeder {
           tags: [{ id: 2, name: 'foo2' }, { id: 3, name: 'foo3' }],
         },
       ],
-    })
+    });
+
+    em.assign(author.articles[0], {
+      comments: [
+        { author, text: `random comment ${Math.random()}` },
+        { author, text: `random comment ${Math.random()}` },
+      ],
+    });
+
+    em.assign(author.articles[1], {
+      comments: [
+        { author, text: `random comment ${Math.random()}` },
+      ],
+    });
+
+    em.assign(author.articles[2], {
+      comments: [
+        { author, text: `random comment ${Math.random()}` },
+        { author, text: `random comment ${Math.random()}` },
+        { author, text: `random comment ${Math.random()}` },
+      ],
+    });
   }
+
 }

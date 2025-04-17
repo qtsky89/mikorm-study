@@ -26,7 +26,7 @@ function convertToSlug(text: string) {
 
 }
 */
-@Entity()
+@Entity({ repository: () => ArticleRepository })
 export class Article extends BaseEntity<'slug' | 'description'>{
   [EntityRepositoryType]?: ArticleRepository;
   

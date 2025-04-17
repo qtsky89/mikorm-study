@@ -23,7 +23,7 @@ export async function registerArticleRoutes(app: FastifyInstance) {
     const { slug } = request.params as { slug: string};
 
     return db.article.findOneOrFail({slug}, {
-      populate: ['author', 'comments.author', 'text'],
+      populate: ['author', 'comments', 'text'],
     })
   })
 

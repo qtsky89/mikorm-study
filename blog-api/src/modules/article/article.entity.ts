@@ -1,7 +1,8 @@
-import { Collection, Entity, ManyToMany, ManyToOne, OneToMany, OptionalProps, Property, t } from "@mikro-orm/core";
+import { Collection, Entity, EntityRepositoryType, ManyToMany, ManyToOne, OneToMany, OptionalProps, Property, t } from "@mikro-orm/core";
 import { BaseEntity } from "../common/base.entity.js";
 import { User } from "../user/user.entity.js";
 import { Tag } from "../user/tag.entity.js";
+import { ArticleRepository } from "./article.repository.js";
 
 
 function convertToSlug(text: string) {
@@ -27,6 +28,8 @@ function convertToSlug(text: string) {
 */
 @Entity()
 export class Article extends BaseEntity<'slug' | 'description'>{
+  [EntityRepositoryType]?: ArticleRepository;
+  
   @Property({ unique: true})
   slug!: string;
 

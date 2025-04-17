@@ -1,6 +1,9 @@
 import { FastifyInstance } from 'fastify'
 import {initORM} from '../../db.js'
 import { getUserFromToken } from '../common/utils.js'
+import { wrap } from '@mikro-orm/core'
+import { Article } from './article.entity.js'
+import { User } from '../user/user.entity.js'
 
 export async function registerArticleRoutes(app: FastifyInstance) {
   const db = await initORM()
@@ -53,4 +56,23 @@ export async function registerArticleRoutes(app: FastifyInstance) {
     await db.em.flush()
     return article
   })
+
+  app.patch('/:id', async request => {
+    const user = getUserFromToken(request)
+    const params = request.params as {id: string}
+    const article = await db.article.findOneOrFail(+params.id)
+    
+    verifyArticlePermissions(user, article)
+    wrap(article).assign(request.body as Article)
+    await db.em.flush()
+
+    return article
+  })
 }
+
+export function verifyArticlePermissions(user: User, article: Article): void {
+  if (article.author.id !== user.id) {
+    throw new Error('You are not the author of this article!');
+  }
+}
+

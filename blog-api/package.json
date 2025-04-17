@@ -20,8 +20,9 @@
     "vitest": "^3.1.1"
   },
   "scripts": {
-    "build": "tsc",
     "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
-    "test": "vitest"
+    "test": "vitest",
+    "build": "tsc && npx mikro-orm-esm cache:generate --combined",
+    "start:prod": "NODE_ENV=production node dist/server.js"
   }
 }

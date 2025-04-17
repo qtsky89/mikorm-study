@@ -14,7 +14,7 @@ export async function registerArticleRoutes(app: FastifyInstance) {
     //   limit, offset
     // })
 
-    const {items, total} = await db.article.listArticles({limit, offset})
+    const {items, total} = await db.article.listArticles({limit, offset, cache: 5_000})
 
     return {items, total}
   })

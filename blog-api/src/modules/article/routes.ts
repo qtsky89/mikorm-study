@@ -68,6 +68,21 @@ export async function registerArticleRoutes(app: FastifyInstance) {
 
     return article
   })
+
+  app.delete('/:id', async (request) => {
+    const user = getUserFromToken(request)
+    const params = request.params as {id: string}
+    const article = await db.article.findOne(+params.id)
+
+    if (!article) {
+      return {notFound: true}
+    }
+
+    verifyArticlePermissions(user, article)
+    await db.em.remove(article).flush()
+
+    return {success: true}
+  })
 }
 
 export function verifyArticlePermissions(user: User, article: Article): void {
@@ -75,4 +90,15 @@ export function verifyArticlePermissions(user: User, article: Article): void {
     throw new Error('You are not the author of this article!');
   }
 }
+
+/* ref. https://mikro-orm.io/docs/guide/advanced#upserting-entities
+   upsert 
+
+-const article = await db.article.findOneOrFail(+params.id);
+-wrap(article).assign(request.body as Article);
+-await db.em.flush();
++const article = await db.article.upsert(request.body as Article);
+
+*/
+
 
